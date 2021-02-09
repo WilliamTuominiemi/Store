@@ -73,8 +73,7 @@ app.use('/', index)
 
 // 404
 app.use((req, res) => {
-    console.log(req)
-	//res.status(404).render('404', { title: 'Page not found' })
+	res.status(404).render('404', { title: 'Page not found' })
 })
 
 // Listen for requests

@@ -3,8 +3,13 @@ const Post = require('../models/post')
 
 // Redirects to /posts
 const index_store = (req, res) => {
-    res.render('index')}
-
+	if(req.user === undefined) {
+		console.log("not logged in")
+	}	else {
+		console.log(req.user)
+	}
+	res.render('index', { title: 'About' })
+}
 // Renders EJS page
 const index_about = (req, res) => {
 	//res.render('about', { title: 'About' })
@@ -76,15 +81,13 @@ const post_delete = (req, res) => {
 	})*/
 }
 
-const index_main = (req, res) => {
-    res.render('main')
-}
+
 
 module.exports = {
 	index_store,
 	index_about,
 	index_profile,
 	index_profile_,
-	post_delete,
-    index_main
+	post_delete
+    
 }

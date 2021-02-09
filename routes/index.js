@@ -4,8 +4,7 @@ const payController = require('../controllers/payController')
 
 const router = express.Router()
 
-router.get('/', indexController.index_main)
-router.get('/store', indexController.index_store)
+router.get('/', indexController.index_store)
 router.post('/pay', payController.pay)
 router.get('/success', payController.success)
 router.get('/cancel', payController.cancel)
