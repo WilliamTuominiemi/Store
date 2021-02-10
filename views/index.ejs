@@ -6,16 +6,18 @@
 
         <div class="products">
             <% items.forEach(item => { %>
-                <div class="product">
-                    <h1> <%= item.title %> </h1>
-                    <% const imageUrl = '/images/'+item.image_name.toString() %>
-                    <img class="logo" src=<%= imageUrl %> alt=<%= item.title %> height=125px width=200px>                    
-                    <h2> <%= item.price %> </h2>
-                    <form action="/pay" method="post">
-                        <input type="text" name="address" id="address" placeholder="Address" required> 
-                        <input type="submit" value="buy">
-                    </form>
-                </div>
+                <a href=<%=item._id%>> 
+                    <div class="product">
+                        <h1> <%= item.title %> </h1>
+                        <% const imageUrl = '/images/'+item.image_name.toString() %>
+                        <img class="logo" src=<%= imageUrl %> alt=<%= item.title %> height=125px width=200px>                    
+                        <h2> <%= item.price %> </h2>
+                        <!-- <form action="/pay" method="post">
+                            <input type="text" name="address" id="address" placeholder="Address" required> 
+                            <input type="submit" value="buy">
+                        </form> -->
+                    </div>
+                </a>
             <% }) %>
         </div>
         
@@ -24,6 +26,6 @@
             
     	</main> -->
         
-        <button onclick="SecondLast()">Click me</button>
+        <!-- <button onclick="SecondLast()">Click me</button> -->
 	</body>
 </html>

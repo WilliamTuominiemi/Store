@@ -6,11 +6,11 @@ dotenv.config({ path: './config/config.env' })
 
 const admin_id = `${process.env.ADMIN_ID}`
 
-const render_index = (req, res, user, dev) => {
+const render_index = (req, res, user, dev, page) => {
 	Item.find()
 	.then((result) => {
-		console.log(result)
-		res.render('index', { title: 'Store', user: user, dev: dev, items: result})
+		console.log(page)
+		res.render(page, { title: 'Store', user: user, dev: dev, items: result})
 	})
 	.catch((err) => {
 		console.log(err)
@@ -21,15 +21,13 @@ const render_index = (req, res, user, dev) => {
 const index_store = (req, res) => {
 	if(req.user === undefined) {
 		console.log("not logged in")
-		render_index(req, res, "undefined", false)
+		render_index(req, res, "undefined", false, 'index')
 	}	else {
-		//console.log(req.user)
-		// Dev googleId: 118195899940427162005
 		if(req.user.googleId.toString() === admin_id)	{
-			render_index(req, res, req.user, true)
+			render_index(req, res, req.user, true, 'index')
 
 		}	else {
-			render_index(req, res,req.user, false)
+			render_index(req, res,req.user, false, 'index')
 		}
 	}
 }
@@ -56,6 +54,28 @@ const index_dev_post = (req, res) => {
 		})
 		.catch((err) => {
 			console.log(err)
+	})
+}
+
+const product_page = (req, res) => {
+	const param = req.params.id
+	console.log(param)
+	const page = 'product'
+	Item.find( {_id: param})
+	.then((result) => {
+		console.log(result)
+		if(req.user === undefined) {
+			console.log("not logged in")
+			res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
+
+		}	else {
+			if(req.user.googleId.toString() === admin_id)	{
+				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
+			}	else {
+				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
+
+			}
+		}
 	})
 }
 
@@ -139,5 +159,6 @@ module.exports = {
 	index_profile_,
 	post_delete,
     index_dev,
-	index_dev_post
+	index_dev_post,
+	product_page
 }

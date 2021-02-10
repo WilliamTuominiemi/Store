@@ -13,6 +13,8 @@ router.post('/pay', payController.pay)
 router.get('/success', payController.success)
 router.get('/cancel', payController.cancel)
 
+router.get('/:id', indexController.product_page)
+
 //router.get('/about', indexController.index_about)
 //router.get('/profile', indexController.index_profile)
 //router.get('/profile/:posterId', indexController.index_profile_)

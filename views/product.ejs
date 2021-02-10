@@ -1,0 +1,26 @@
+<html lang="en">
+	<%- include("./partials/head.ejs") %>
+
+	<body>
+		<%- include("./partials/nav.ejs") %>
+
+        <div class="products">
+            <h1> <%= data.title %> </h1>
+            <% const imageUrl = '/images/'+data.image_name.toString() %>
+            <img class="logo" src=<%= imageUrl %> alt=<%= data.title %> height=125px width=200px>   
+            <p> <%= data.desc %> </p>                 
+            <h2> <%= data.price %> </h2>
+            <form action="/pay" method="post">
+                <input type="text" name="address" id="address" placeholder="Address" required> 
+                <input type="submit" value="buy">
+            </form>
+        </div>
+        
+
+		<!-- <main role="main" class="container">
+            
+    	</main> -->
+        
+        <!-- <button onclick="SecondLast()">Click me</button> -->
+	</body>
+</html>
