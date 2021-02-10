@@ -1,19 +1,29 @@
 const Item = require('../models/Item')
 
+const render_index = (req, res, user, dev) => {
+	Item.find()
+	.then((result) => {
+		console.log(result)
+		res.render('index', { title: 'Store', user: user, dev: dev, items: result})
+	})
+	.catch((err) => {
+		console.log(err)
+	})
+}
 
 // Redirects to /posts
 const index_store = (req, res) => {
 	if(req.user === undefined) {
 		console.log("not logged in")
-		res.render('index', { title: 'About', user: "undefined", dev: false })
-
+		render_index(req, res, "undefined", false)
 	}	else {
-		console.log(req.user)
+		//console.log(req.user)
 		// Dev googleId: 118195899940427162005
 		if(req.user.googleId.toString() === "118195899940427162005")	{
-			res.render('index', { title: 'About', user: req.user, dev: true })
+			render_index(req, res, req.user, true)
+
 		}	else {
-			res.render('index', { title: 'About', user: req.user,  dev: false })
+			render_index(req, res,req.user, false)
 		}
 	}
 }
