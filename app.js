@@ -73,7 +73,11 @@ app.use('/', index)
 
 // 404
 app.use((req, res) => {
-	res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })
+	if(req.user === undefined) {
+		res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })
+	}	else {
+		res.status(404).render('404', { title: 'Page not found', user: req.user, dev: false })
+	}
 })
 
 // Listen for requests

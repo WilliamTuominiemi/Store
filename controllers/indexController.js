@@ -1,5 +1,11 @@
 const Item = require('../models/Item')
 
+const dotenv = require('dotenv')
+
+dotenv.config({ path: './config/config.env' })
+
+const admin_id = `${process.env.ADMIN_ID}`
+
 const render_index = (req, res, user, dev) => {
 	Item.find()
 	.then((result) => {
@@ -19,7 +25,7 @@ const index_store = (req, res) => {
 	}	else {
 		//console.log(req.user)
 		// Dev googleId: 118195899940427162005
-		if(req.user.googleId.toString() === "118195899940427162005")	{
+		if(req.user.googleId.toString() === admin_id)	{
 			render_index(req, res, req.user, true)
 
 		}	else {
@@ -32,7 +38,7 @@ const index_dev = (req, res) => {
 	if(req.user === undefined) {
 		res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })
 	}	else {
-		if(req.user.googleId.toString() === "118195899940427162005" ) {
+		if(req.user.googleId.toString() === admin_id) {
 			res.render('dev', { title: 'DEV', user: req.user,  dev: true })
 		}	else {
 			res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })

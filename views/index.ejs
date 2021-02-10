@@ -11,10 +11,10 @@
                     <% const imageUrl = '/images/'+item.image_name.toString() %>
                     <img class="logo" src=<%= imageUrl %> alt=<%= item.title %> height=125px width=200px>                    
                     <h2> <%= item.price %> </h2>
-                    <!-- <form action="/pay" method="post">
+                    <form action="/pay" method="post">
                         <input type="text" name="address" id="address" placeholder="Address" required> 
                         <input type="submit" value="buy">
-                    </form> -->
+                    </form>
                 </div>
             <% }) %>
         </div>
