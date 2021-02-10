@@ -18,6 +18,13 @@
 	
 
 	<style>
+		.product {
+			text-align: center;
+			border: 2px solid black;
+			width: 250px;
+			height: 250px;
+		}
+		
 		.delete	{
 			float: right;
 		}
@@ -59,7 +66,19 @@
 	</style>
 
 	<script>
-
+		_spBodyOnLoadFunctionNames.push("GetUrl");  
+		
+		function GetUrl() {
+		var referrer =  document.referrer;
+		//alert(referrer);
+		}
+		
+		function SecondLast(){
+		var x=history.go(-2);
+		//alert(x);
+		}
+		
+	
 	</script>
 
 

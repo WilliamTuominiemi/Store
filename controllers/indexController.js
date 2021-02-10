@@ -1,15 +1,48 @@
-const Post = require('../models/post')
+const Item = require('../models/Item')
 
 
 // Redirects to /posts
 const index_store = (req, res) => {
 	if(req.user === undefined) {
 		console.log("not logged in")
+		res.render('index', { title: 'About', user: "undefined", dev: false })
+
 	}	else {
 		console.log(req.user)
+		// Dev googleId: 118195899940427162005
+		if(req.user.googleId.toString() === "118195899940427162005")	{
+			res.render('index', { title: 'About', user: req.user, dev: true })
+		}	else {
+			res.render('index', { title: 'About', user: req.user,  dev: false })
+		}
 	}
-	res.render('index', { title: 'About' })
 }
+
+const index_dev = (req, res) => {
+	if(req.user === undefined) {
+		res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })
+	}	else {
+		if(req.user.googleId.toString() === "118195899940427162005" ) {
+			res.render('dev', { title: 'DEV', user: req.user,  dev: true })
+		}	else {
+			res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })
+		}
+	}
+}
+
+const index_dev_post = (req, res) => {
+	const item = new Item(req.body)
+
+	item
+		.save()
+		.then((result) => {
+			res.redirect('/dev')
+		})
+		.catch((err) => {
+			console.log(err)
+	})
+}
+
 // Renders EJS page
 const index_about = (req, res) => {
 	//res.render('about', { title: 'About' })
@@ -88,6 +121,7 @@ module.exports = {
 	index_about,
 	index_profile,
 	index_profile_,
-	post_delete
-    
+	post_delete,
+    index_dev,
+	index_dev_post
 }

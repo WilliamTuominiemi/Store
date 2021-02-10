@@ -1,4 +1,4 @@
-const Post = require('../models/post')
+const Post = require('../models/Item')
 
 const post_delete = (req, res) => {	
 	/*console.log(req.params.id)

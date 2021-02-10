@@ -2,31 +2,21 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // Schema
-const PostSchema = new Schema(
+const ItemSchema = new Schema(
 	{
-		posterId: {
-			type: Number,
-			required: true,
-		},
 		title: {
 			type: String,
 			required: true,
 		},
-		body: {
-			type: String
-		},
-		username: {
-			type: String,
-		},
-		privacy: {
+		desc: {
 			type: String,
 			required: true
 		},
-		state: {
+		image_name: {
 			type: String,
-			required: true
+			required: true		
 		},
-		author: {
+		price: {
 			type: String,
 			required: true
 		}
@@ -35,4 +25,4 @@ const PostSchema = new Schema(
 )
 
 // Model
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model('Item', ItemSchema)

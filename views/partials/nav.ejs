@@ -2,7 +2,7 @@
 	class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm"
 >
 	<!-- Logo -->
-	<h5 class="my-0 mr-md-auto font-weight-normal">Store</h5>
+	<h3 class="my-0 mr-md-auto font-weight-normal"> Store </h3>
 	<!-- Links -->
 	<nav class="my-2 my-md-0 mr-md-3">
 		<!-- <a class="p-2 text-dark" href="/">Home</a> -->
@@ -11,20 +11,30 @@
 	</nav>
 	<!-- Sign in button -->
 	<!-- <a class="btn btn-outline-dark" href="/auth/google">Sign in</a> -->
-	<a href="/auth/google">
-		<img alt="SignIn" src="https://www.oncrashreboot.com/images/create-apple-google-signin-buttons-quick-dirty-way-google.png"
-		width="157,5" height="37,5">
-	 </a>
+	<% if(user === "undefined") { %>
+		<a href="/auth/google">
+			<img alt="SignIn" src="https://www.oncrashreboot.com/images/create-apple-google-signin-buttons-quick-dirty-way-google.png"
+			width="157,5" height="37,5">
+		</a>
+	<% } else { %>
+		<h5> Hello, <%= user.displayName %> </h5>
+	<% } %>
+	
 
-	 <div class="dropdown">
+	 <div class="dropdown">	
 		<button class="dropbtn">
 			<img alt="SignIn" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png"
 			width="50" height="50">
 		</button>
 		<div class="dropdown-content">
-		  <a href="/">Main</a>
-		  <a href="/profile">Profile</a>
-		  <a href="/auth/logout">Logout</a>
+		  	<a href="/">Main</a>
+		  	<a href="/profile">Profile</a>
+			<% if(user != "undefined") { %>
+				<a href="/auth/logout">Logout</a>
+			<% } %>
+			<% if(dev) { %>
+				<a href="/dev">Admin Console</a>
+			<% } %>
 		</div>
 	  </div>
 </div>

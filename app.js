@@ -12,7 +12,7 @@ const auth = require('./routes/auth')
 const index = require('./routes/index')
 const pay = require('./routes/pay')
 
-const Post = require('./models/post')
+const Post = require('./models/Item')
 const connectDB = require('./config/db')
 
 const ejs = require('ejs')
@@ -73,7 +73,7 @@ app.use('/', index)
 
 // 404
 app.use((req, res) => {
-	res.status(404).render('404', { title: 'Page not found' })
+	res.status(404).render('404', { title: 'Page not found', user: "undefined", dev: false })
 })
 
 // Listen for requests

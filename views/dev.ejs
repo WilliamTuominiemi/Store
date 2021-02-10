@@ -1,0 +1,36 @@
+<html lang="en">
+	<%- include("./partials/head.ejs") %>
+
+	<body>
+		<%- include("./partials/nav.ejs") %>
+
+		<main role="main" class="container">
+            <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+                    <div class="pricing-header py-3 pt-md-5 pb-md-4 mx-auto">
+						<h3 class="display-4">Add Item</h3>
+					</div>
+                    <form action="/dev" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="title" id="title" placeholder="Title" required> 
+                        </div>
+                        <div class="form-group">
+                            <textarea type="desc" rows="5" class="form-control" name="desc" id="desc" placeholder="Description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="image_name" class="form-control" name="image_name" id="image_name" placeholder="Image name" required> 
+                        </div>
+                        <div class="form-group">
+                            <input type="price" class="form-control" name="price" id="price" placeholder="Price" required> 
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="add">
+                        </div>
+                    </form>
+                </div>
+            </div>
+    	</main>
+        
+		<%- include("./partials/footer.ejs") %>
+	</body>
+</html>
