@@ -9,7 +9,6 @@ const admin_id = `${process.env.ADMIN_ID}`
 const render_index = (req, res, user, dev, page) => {
 	Item.find()
 	.then((result) => {
-		console.log(page)
 		res.render(page, { title: 'Store', user: user, dev: dev, items: result})
 	})
 	.catch((err) => {
@@ -20,7 +19,6 @@ const render_index = (req, res, user, dev, page) => {
 // Redirects to /posts
 const index_store = (req, res) => {
 	if(req.user === undefined) {
-		console.log("not logged in")
 		render_index(req, res, "undefined", false, 'index')
 	}	else {
 		if(req.user.googleId.toString() === admin_id)	{
@@ -46,7 +44,6 @@ const index_dev = (req, res) => {
 
 const index_dev_post = (req, res) => {
 	const item = new Item(req.body)
-
 	item
 		.save()
 		.then((result) => {
@@ -59,21 +56,16 @@ const index_dev_post = (req, res) => {
 
 const product_page = (req, res) => {
 	const param = req.params.id
-	console.log(param)
 	const page = 'product'
 	Item.find( {_id: param})
 	.then((result) => {
-		console.log(result)
 		if(req.user === undefined) {
-			console.log("not logged in")
 			res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
-
 		}	else {
 			if(req.user.googleId.toString() === admin_id)	{
 				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
 			}	else {
 				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
-
 			}
 		}
 	})

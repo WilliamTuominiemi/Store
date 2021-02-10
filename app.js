@@ -68,7 +68,6 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 // Routes
 app.use('/posts', post)
 app.use('/auth', auth)
-//app.use('/pay', pay)
 app.use('/', index)
 
 // 404

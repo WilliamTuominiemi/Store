@@ -6,17 +6,13 @@ const router = express.Router()
 
 router.get(
 	'/google', 
-	passport.authenticate('google', { scope: ['profile'] }), 
-	(req, res) => {
-		console.log(req)
-	} 
+	passport.authenticate('google', { scope: ['profile'] })
 )
 
 router.get(
 	'/google/callback',
 	passport.authenticate('google', { failureRedirect: '/' }),
 	(req, res) => {
-		console.log(req)
 		res.redirect('/')
 	}
 )
