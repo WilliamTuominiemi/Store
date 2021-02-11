@@ -1,6 +1,8 @@
 const paypal = require('paypal-rest-sdk')
 const dotenv = require('dotenv')
 
+const Order = require('../models/Order')
+
 dotenv.config({ path: '../config/config.env' })
 
 paypal.configure({
@@ -10,6 +12,8 @@ paypal.configure({
 });
 
 const pay = (req, res) => {
+    console.log(req.body)
+
     const create_payment_json = {
       "intent": "sale",
       "payer": {
@@ -22,18 +26,18 @@ const pay = (req, res) => {
       "transactions": [{
           "item_list": {
               "items": [{
-                  "name": "Triple OG Blood Bubba's Semen Kush",
+                  "name": req.body.name,
                   "sku": "001",
-                  "price": "20.00",
+                  "price": parseFloat(req.body.price),
                   "currency": "EUR",
                   "quantity": 1
               }]
           },
           "amount": {
               "currency": "EUR",
-              "total": "20.00"
+              "total": parseFloat(req.body.price)
           },
-          "description": "Kush so greasy it drippin like semen"
+          "description": req.body.desc
       }]
   };
   
@@ -54,6 +58,8 @@ const success = (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
   
+    console.log(req.query)
+
     const execute_payment_json = {
       "payer_id": payerId,
       "transactions": [{
@@ -65,12 +71,36 @@ const success = (req, res) => {
     };
   
     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-      if (error) {
-          console.log(error.response);
-          throw error;
-      } else {
-          console.log(payment);
-          res.send('Success');
+        if (error) {
+            console.log(error.response);
+            throw error;
+        } else {
+            console.log(payment.transactions[0].item_list);
+
+
+            const body = {
+                googleId: req.user.googleId,
+                recipient_name: payment.payer.payer_info.shipping_address.recipient_name,
+                email: payment.payer.payer_info.email,
+                address: payment.payer.payer_info.shipping_address.line1,
+                city: payment.payer.payer_info.shipping_address.city,
+                state: payment.payer.payer_info.shipping_address.state,
+                postal_code: payment.payer.payer_info.shipping_address.postal_code,
+                country_code: payment.payer.payer_info.shipping_address.country_code,
+                item_name: payment.transactions[0].item_list.items[0].name,
+                item_price: payment.transactions[0].item_list.items[0].price
+            }
+
+            const order = new Order(body)
+            order
+                .save()
+                .then((result) => {
+                    console.log(result)
+                    res.redirect('/orders')
+                })
+                .catch((err) => {
+                    console.log(err)
+            })
       }
   });
 }

@@ -4,16 +4,22 @@
 	<body>
 		<%- include("./partials/nav.ejs") %>
 
-        <div class="products">
-            <h1> <%= data.title %> </h1>
-            <% const imageUrl = '/images/'+data.image_name.toString() %>
-            <img class="logo" src=<%= imageUrl %> alt=<%= data.title %> height=125px width=200px>   
-            <p> <%= data.desc %> </p>                 
-            <h2> <%= data.price %> </h2>
-            <form action="/pay" method="post">
-                <input type="text" name="address" id="address" placeholder="Address" required> 
-                <input type="submit" value="buy">
-            </form>
+        <div class="prod">
+            <div class="prod_img">
+                <% const imageUrl = '/images/'+data.image_name.toString() %>
+                <img class="logo" src=<%= imageUrl %> alt=<%= data.title %> height=250px width=400>   
+            </div>
+            <div class="prod_info">
+                <h1> <%= data.title %> </h1>      
+                <p> <%= data.desc %> </p>                 
+                <form action="/pay" method="post">
+                    <input type = "hidden" name = "name" id="name" value="<%= data.title %>" />
+					<input type = "hidden" name = "desc" id="desc" value="<%= data.desc %>" />
+                    <input type = "hidden" name = "price" id="price" value="<%= data.price %>" />
+
+                    <input type="submit" value="buy for <%= data.price %>">
+                </form>
+            </div>        
         </div>
         
 

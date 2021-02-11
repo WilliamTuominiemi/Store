@@ -1,4 +1,5 @@
 const Item = require('../models/Item')
+const Order = require('../models/Order')
 
 const dotenv = require('dotenv')
 
@@ -63,17 +64,33 @@ const product_page = (req, res) => {
 			res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
 		}	else {
 			if(req.user.googleId.toString() === admin_id)	{
-				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
+				res.render(page, { title: result[0].title, user: req.user, dev: true, data: result[0]})
 			}	else {
-				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
+				res.render(page, { title: result[0].title, user: req.user, dev: false, data: result[0]})
 			}
 		}
 	})
 }
 
+const orders = (req, res) => {
+	const param = req.user.googleId
+	const page = 'orders'
+	//res.render(page, { title: 'Orders' })
+	if(req.user === undefined) {
+		res.redirect('/auth/google')
+	}	
+	else {
+		Order.find( {googleId: param})
+		.then((result) => {
+			res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result})
+		})
+	}		
+}
+
 // Renders EJS page
 const index_about = (req, res) => {
 	//res.render('about', { title: 'About' })
+	
 }
 
 // View profile only if our are signed in
@@ -152,5 +169,6 @@ module.exports = {
 	post_delete,
     index_dev,
 	index_dev_post,
-	product_page
+	product_page,
+	orders
 }

@@ -7,6 +7,7 @@ const router = express.Router()
 router.get('/', indexController.index_store)
 router.get('/dev', indexController.index_dev)
 router.post('/dev', indexController.index_dev_post)
+router.get('/orders', indexController.orders)
 
 
 router.post('/pay', payController.pay)
@@ -14,6 +15,7 @@ router.get('/success', payController.success)
 router.get('/cancel', payController.cancel)
 
 router.get('/:id', indexController.product_page)
+
 
 //router.get('/about', indexController.index_about)
 //router.get('/profile', indexController.index_profile)

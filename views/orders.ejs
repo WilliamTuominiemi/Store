@@ -1,0 +1,26 @@
+<html lang="en">
+	<%- include("./partials/head.ejs") %>
+
+	<body>
+		<%- include("./partials/nav.ejs") %>
+
+        <% orders.forEach(order => { %>
+            <div class="orders">
+                <div class="order">
+                    <h1> <%= order.item_name %> </h1>
+                    <h3> Price: <%= order.item_price %> €</h3>
+                    <h2> Address: <%= order.address %> </h2>
+                    <p> Order id: <%= order._id %> </p>
+                </div>
+            </div>     
+        <% }) %>
+        
+        
+
+		<!-- <main role="main" class="container">
+            
+    	</main> -->
+        
+        <!-- <button onclick="SecondLast()">Click me</button> -->
+	</body>
+</html>
