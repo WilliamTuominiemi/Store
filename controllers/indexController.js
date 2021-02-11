@@ -10,7 +10,7 @@ const admin_id = `${process.env.ADMIN_ID}`
 const render_index = (req, res, user, dev, page) => {
 	Item.find()
 	.then((result) => {
-		res.render(page, { title: 'Store', user: user, dev: dev, items: result})
+		res.render(page, { title: 'Main', user: user, dev: dev, items: result})
 	})
 	.catch((err) => {
 		console.log(err)

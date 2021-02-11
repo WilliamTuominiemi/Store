@@ -5,6 +5,8 @@ const Order = require('../models/Order')
 
 dotenv.config({ path: '../config/config.env' })
 
+let price;
+
 paypal.configure({
     'mode': 'sandbox', //sandbox or live
     'client_id': process.env.CLIENT_ID,
@@ -12,7 +14,7 @@ paypal.configure({
 });
 
 const pay = (req, res) => {
-    console.log(req.body)
+    price = parseFloat(req.body.price)
 
     const create_payment_json = {
       "intent": "sale",
@@ -58,14 +60,12 @@ const success = (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
   
-    console.log(req.query)
-
     const execute_payment_json = {
       "payer_id": payerId,
       "transactions": [{
           "amount": {
               "currency": "EUR",
-              "total": "20.00"
+              "total": price
           }
       }]
     };
@@ -75,9 +75,6 @@ const success = (req, res) => {
             console.log(error.response);
             throw error;
         } else {
-            console.log(payment.transactions[0].item_list);
-
-
             const body = {
                 googleId: req.user.googleId,
                 recipient_name: payment.payer.payer_info.shipping_address.recipient_name,
@@ -95,7 +92,6 @@ const success = (req, res) => {
             order
                 .save()
                 .then((result) => {
-                    console.log(result)
                     res.redirect('/orders')
                 })
                 .catch((err) => {

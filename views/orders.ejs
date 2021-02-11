@@ -14,6 +14,12 @@
                 </div>
             </div>     
         <% }) %>
+        <% if(orders.length === 0) { %>
+            <center>
+                <h5> There are no orders here </h5>
+                <a href="/">Back to shopping</a>
+            </center>
+        <% } %>
         
         
 
