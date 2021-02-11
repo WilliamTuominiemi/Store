@@ -28,8 +28,8 @@
 		</button>
 		<div class="dropdown-content">
 		  	<a href="/">Main</a>
-		  	<a href="/profile">Profile</a>
 			<% if(user != "undefined") { %>
+				<a href="/orders">Orders</a>
 				<a href="/auth/logout">Logout</a>
 			<% } %>
 			<% if(dev) { %>

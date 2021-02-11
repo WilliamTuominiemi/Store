@@ -73,13 +73,14 @@ const product_page = (req, res) => {
 }
 
 const orders = (req, res) => {
-	const param = req.user.googleId
 	const page = 'orders'
 	//res.render(page, { title: 'Orders' })
 	if(req.user === undefined) {
 		res.redirect('/auth/google')
 	}	
 	else {
+		const param = req.user.googleId
+
 		Order.find( {googleId: param})
 		.then((result) => {
 			res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result})
