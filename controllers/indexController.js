@@ -1,5 +1,7 @@
 const Item = require('../models/Item')
 const Order = require('../models/Order')
+const Cart = require('../models/Cart')
+
 
 const dotenv = require('dotenv')
 
@@ -89,7 +91,38 @@ const orders = (req, res) => {
 }
 
 const add_to_cart = (req, res) => {
-	
+	console.log(req.body, req.user.googleId)
+
+	Item.find( {_id: req.body.id} )
+	.then((result) => {
+		const body = {
+			googleId: req.user.googleId,
+			item_id: result[0]._id.toString(),
+			item_name: result[0].title,
+			price: result[0].price,
+			amount: req.body.amount
+		}
+
+		const cart = new Cart(body)
+
+		cart
+			.save()
+			.then((result) => {
+				res.redirect('/cart')
+			})
+			.catch((err) => {
+				console.log(err)
+		})
+	})
+}
+
+const cart = (req, res) => {
+	console.log('pog')
+	Cart.find( { googleId: req.user.googleId})
+	.sort({ createdAt: -1 })
+	.then((result) => {
+		res.render('cart', { title: 'Cart', user: req.user, dev: false, items: result})
+	})
 }
 
 // Renders EJS page
@@ -175,5 +208,7 @@ module.exports = {
     index_dev,
 	index_dev_post,
 	product_page,
-	orders
+	orders,
+	add_to_cart,
+	cart
 }

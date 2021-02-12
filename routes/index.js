@@ -8,6 +8,9 @@ router.get('/', indexController.index_store)
 router.get('/dev', indexController.index_dev)
 router.post('/dev', indexController.index_dev_post)
 router.get('/orders', indexController.orders)
+router.post('/addtocart', indexController.add_to_cart)
+router.get('/cart', indexController.cart)
+
 
 
 router.post('/pay', payController.pay)
