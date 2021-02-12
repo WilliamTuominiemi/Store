@@ -2,6 +2,8 @@ const paypal = require('paypal-rest-sdk')
 const dotenv = require('dotenv')
 
 const Order = require('../models/Order')
+const Item = require('../models/Item')
+
 
 dotenv.config({ path: '../config/config.env' })
 
@@ -14,46 +16,84 @@ paypal.configure({
 });
 
 const pay = (req, res) => {
-    price = parseFloat(req.body.price)
+    
+    async function f() {
 
-    const create_payment_json = {
-      "intent": "sale",
-      "payer": {
-          "payment_method": "paypal"
-      },
-      "redirect_urls": {
-          "return_url": "http://localhost:3000/success",
-          "cancel_url": "http://localhost:3000/cancel"
-      },
-      "transactions": [{
-          "item_list": {
-              "items": [{
-                  "name": req.body.name,
-                  "sku": "001",
-                  "price": parseFloat(req.body.price),
-                  "currency": "EUR",
-                  "quantity": 1
-              }]
-          },
-          "amount": {
-              "currency": "EUR",
-              "total": parseFloat(req.body.price)
-          },
-          "description": req.body.desc
-      }]
-  };
-  
-  paypal.payment.create(create_payment_json, function (error, payment) {
-    if (error) {
-        throw error;
-    } else {
-        for(let i = 0;i < payment.links.length;i++){
-          if(payment.links[i].rel === 'approval_url'){
-            res.redirect(payment.links[i].href);
-          }
-        }
+        items = [];
+        req_items = req.body.body
+
+        let itemsProcessed = 0
+
+        req_items.forEach(item => {
+            console.log(item.id)
+
+
+            const param = item.id
+            Item.find({ _id: param })
+            .then((result) => {
+                const item_body = {
+                    "name": result[0].title,
+                    "sku": "001",
+                    "price": parseFloat(result[0].price),
+                    "currency": "EUR",
+                    "quantity": item.amount
+                }
+                items.push(item_body)
+                itemsProcessed = itemsProcessed + 1 
+            })
+            .catch((err) => {
+                console.log(err)
+            })   
+        })
+
+        let promise = new Promise((resolve, reject) => {
+          setTimeout(() => resolve("done!"), 1000)
+        });
+      
+        let result = await promise; // wait until the promise resolves (*)
+      
+        console.log(items)
+
+        const create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:3000/success",
+                "cancel_url": "http://localhost:3000/cancel"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [items]
+                },
+                "amount": {
+                    "currency": "EUR",
+                    "total": parseFloat(req.body.subtotal)
+                },
+                "description": "Purcahsed from the Store"
+            }]
+        };
+        
+        console.log(req.body)
+        console.log(create_payment_json.transactions[0])
+
+        
+
+        // paypal.payment.create(create_payment_json, function (error, payment) {
+        //     if (error) {
+        //         throw error;
+        //     } else {
+        //         for(let i = 0;i < payment.links.length;i++){
+        //         if(payment.links[i].rel === 'approval_url'){
+        //             res.redirect(payment.links[i].href);
+        //         }
+        //         }
+        //     }
+        // });
     }
-  });
+      
+    f();
 }
   
 const success = (req, res) => {
