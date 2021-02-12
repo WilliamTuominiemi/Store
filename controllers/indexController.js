@@ -88,6 +88,10 @@ const orders = (req, res) => {
 	}		
 }
 
+const add_to_cart = (req, res) => {
+	
+}
+
 // Renders EJS page
 const index_about = (req, res) => {
 	//res.render('about', { title: 'About' })
