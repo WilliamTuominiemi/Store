@@ -4,15 +4,33 @@
 	<body>
 		<%- include("./partials/nav.ejs") %>
 
+        <% let total = 0 %>
+        <% let amount = 0 %>
+
+        <div class="cart-items">
         <% items.forEach(item => { %>
-            <div class="cart-items">
+            <% total = total + parseFloat(item.price) %>
+            <% amount = amount + parseInt(item.amount) %>
+
                 <div class="cart-item">
                     <h1> <%= item.item_name %> </h1>
-                    <h3> Price: <%= item.price %> €</h3>
+                    <h3> Price: <%= item.price %></h3>
                     <p> Amount: <%= item.amount %> </p>
                 </div>
-            </div>     
         <% }) %>
+        </div>   
+        
+        <div class="cart-buy">
+            <h3>Subtotal <%= total %>€</h3>
+            <h3> <%= amount %>  item(s)</h3>
+            <p> FREE SHIPPING </p>
+            <form action="/pay" method="post">
+                <input type="submit" value="buy" background-color="red">
+            </form> 
+            <p> We Accept: </p>
+            <img src="/images/PayPal.png" height="30px" width="100px">
+        </div>
+
         <% if(items.length === 0) { %>
             <center>
                 <h5> There are no items in your cart </h5>

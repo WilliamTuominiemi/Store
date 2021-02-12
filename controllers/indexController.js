@@ -117,7 +117,6 @@ const add_to_cart = (req, res) => {
 }
 
 const cart = (req, res) => {
-	console.log('pog')
 	Cart.find( { googleId: req.user.googleId})
 	.sort({ createdAt: -1 })
 	.then((result) => {
