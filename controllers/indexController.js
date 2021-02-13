@@ -59,6 +59,7 @@ const index_dev_post = (req, res) => {
 
 const product_page = (req, res) => {
 	const param = req.params.id
+	console.log('param' , param)
 	const page = 'product'
 	Item.find( {_id: param})
 	.then((result) => {
@@ -88,6 +89,7 @@ const orders = (req, res) => {
 		.then((result) => {
 			async function f() {
 				result.forEach(order => {
+					console.log(order)
 					order.item_ids.forEach(item => {
 						Item.find({_id: item.id})
 						.then((result1) => {
@@ -101,12 +103,12 @@ const orders = (req, res) => {
 				})
 
 				let promise = new Promise((resolve, reject) => {
-					setTimeout(() => resolve("done!"), 100)
+					setTimeout(() => resolve("done!"), 1000)
 				});
 				
 				let p_result = await promise; // wait until the promise resolves (*)
 
-				console.log(items)
+				// console.log(items)
 
 
 				res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result, items: items})
@@ -127,6 +129,7 @@ const add_to_cart = (req, res) => {
 			googleId: req.user.googleId,
 			item_id: result[0]._id.toString(),
 			item_name: result[0].title,
+			image_name: result[0].image_name,
 			price: result[0].price,
 			amount: req.body.amount
 		}

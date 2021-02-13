@@ -29,8 +29,6 @@ const pay = (req, res) => {
 
         req_items.forEach(item => {
             console.log(item.id)
-
-
             const param = item.id
             Item.find({ _id: param })
             .then((result) => {
@@ -47,9 +45,9 @@ const pay = (req, res) => {
                     "id": item.id,
                     "amount": item.amount
                 }
+                console.log(_item)
                 item_ids.push(_item)
                 items.push(item_body)
-                itemsProcessed = itemsProcessed + 1 
             })
             .catch((err) => {
                 console.log(err)

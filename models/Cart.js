@@ -16,6 +16,10 @@ const CartSchema = new Schema(
             type: String,
 			required: true
         },
+		image_name: {
+			type: String,
+			required: true		
+		},
 		price: {
 			type: String,
 			required: true

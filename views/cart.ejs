@@ -23,10 +23,11 @@
                 <% amount = amount + parseInt(item.amount) %>
     
                     <div class="cart-item">
-                        <h1> <%= item.item_name %> </h1>
+                        <% const imageUrl = '/images/'+item.image_name %>
+                        <img class="cart_image" src=<%= imageUrl %> alt=<%= item.item_name %> height=125px width=125px> 
+                        <a href=<%=item.item_id%>> <h1> <%= item.item_name %> </h1> </a>     
                         <h3> Price: <%= item.price %> /item</h3>
                         <p> Amount: <%= item.amount %> </p>
-                        <p> <%= item._id %> </p>
                     </div>
     
                 <% const body = { "id": item._id, "amount": item.amount } %>
