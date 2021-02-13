@@ -3,12 +3,14 @@ const dotenv = require('dotenv')
 
 const Order = require('../models/Order')
 const Item = require('../models/Item')
+const Cart = require('../models/Cart')
 
 
 dotenv.config({ path: '../config/config.env' })
 
 let price;
 let item_ids = [];
+let cartID;
 
 paypal.configure({
     'mode': 'sandbox', //sandbox or live
@@ -32,6 +34,8 @@ const pay = (req, res) => {
             const param = item.id
             Item.find({ _id: param })
             .then((result) => {
+                let _price = parseFloat(result[0].price) * item.amount
+
                 const item_body = {
                     "name": result[0].title,
                     "sku": "001",
@@ -61,6 +65,7 @@ const pay = (req, res) => {
         console.log(items)
 
         price = parseFloat(req.body.subtotal)
+        cartID = req.body.cart_id
 
         const create_payment_json = {
             "intent": "sale",
@@ -143,7 +148,15 @@ const success = (req, res) => {
             order
                 .save()
                 .then((result) => {
-                    res.redirect('/orders')
+                    console.log(cartID)
+                    Cart.deleteMany({ googleId: req.user.googleId }, (err) => {
+                        if (err) {
+                            return handleError(err);
+                        } 
+                        else {
+                            res.redirect('/orders')
+                        }
+                    });
                 })
                 .catch((err) => {
                     console.log(err)

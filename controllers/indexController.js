@@ -111,10 +111,6 @@ const orders = (req, res) => {
 
 				res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result, items: items})
 			}
-
-			
-
-			
 			
 			f();
 
