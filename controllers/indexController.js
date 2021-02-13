@@ -81,11 +81,43 @@ const orders = (req, res) => {
 		res.redirect('/auth/google')
 	}	
 	else {
+		let items = [];
 		const param = req.user.googleId
 
 		Order.find( {googleId: param})
 		.then((result) => {
-			res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result})
+			async function f() {
+				result.forEach(order => {
+					order.item_ids.forEach(item => {
+						Item.find({_id: item.id})
+						.then((result1) => {
+							const _item = {
+								"item_": result1[0],
+								"amount": item.amount
+							}
+							items.push(_item)
+						})
+					})
+				})
+
+				let promise = new Promise((resolve, reject) => {
+					setTimeout(() => resolve("done!"), 100)
+				});
+				
+				let p_result = await promise; // wait until the promise resolves (*)
+
+				console.log(items)
+
+
+				res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result, items: items})
+			}
+
+			
+
+			
+			
+			f();
+
 		})
 	}		
 }

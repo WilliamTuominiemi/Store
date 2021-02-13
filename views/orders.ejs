@@ -7,10 +7,20 @@
         <% orders.forEach(order => { %>
             <div class="orders">
                 <div class="order">
-                    <h1> <%= order.item_name %> </h1>
-                    <h3> Price: <%= order.item_price %> €</h3>
-                    <h2> Address: <%= order.address %> </h2>
-                    <p> Order id: <%= order._id %> </p>
+                    <div class="order_item">
+                        <% items.forEach(item => { %>
+                            <% const imageUrl = '/images/'+item.item_.image_name.toString() %>
+                            <img class="logo" src=<%= imageUrl %> alt=<%= item.item_.title %> height=125px width=125px>   
+                            <%= item.item_.title %>
+                           | Quantity: <%= item.amount %>
+                        <% }) %>
+                    </div>
+                    <div class="order_info">
+                        <h3> Cost: <%= order.subtotal %> €</h3>
+                        <h2> Address: <%= order.address %> </h2>
+                        <p> Order id: <%= order._id %> </p>
+                    </div>
+                    
                 </div>
             </div>     
         <% }) %>

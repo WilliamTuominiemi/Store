@@ -8,6 +8,7 @@ const Item = require('../models/Item')
 dotenv.config({ path: '../config/config.env' })
 
 let price;
+let item_ids = [];
 
 paypal.configure({
     'mode': 'sandbox', //sandbox or live
@@ -38,6 +39,11 @@ const pay = (req, res) => {
                     "currency": "EUR",
                     "quantity": item.amount
                 }
+                let _item = {
+                    "id": item.id,
+                    "amount": item.amount
+                }
+                item_ids.push(_item)
                 items.push(item_body)
                 itemsProcessed = itemsProcessed + 1 
             })
@@ -53,6 +59,8 @@ const pay = (req, res) => {
         let result = await promise; // wait until the promise resolves (*)
       
         console.log(items)
+
+        price = parseFloat(req.body.subtotal)
 
         const create_payment_json = {
             "intent": "sale",
@@ -96,48 +104,52 @@ const pay = (req, res) => {
   
 const success = (req, res) => {
     console.log(success)
-//     const payerId = req.query.PayerID;
-//     const paymentId = req.query.paymentId;
+    const payerId = req.query.PayerID;
+    const paymentId = req.query.paymentId;
   
-//     const execute_payment_json = {
-//       "payer_id": payerId,
-//       "transactions": [{
-//           "amount": {
-//               "currency": "EUR",
-//               "total": price
-//           }
-//       }]
-//     };
-  
-//     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-//         if (error) {
-//             console.log(error.response);
-//             throw error;
-//         } else {
-//             const body = {
-//                 googleId: req.user.googleId,
-//                 recipient_name: payment.payer.payer_info.shipping_address.recipient_name,
-//                 email: payment.payer.payer_info.email,
-//                 address: payment.payer.payer_info.shipping_address.line1,
-//                 city: payment.payer.payer_info.shipping_address.city,
-//                 state: payment.payer.payer_info.shipping_address.state,
-//                 postal_code: payment.payer.payer_info.shipping_address.postal_code,
-//                 country_code: payment.payer.payer_info.shipping_address.country_code,
-//                 item_name: payment.transactions[0].item_list.items[0].name,
-//                 item_price: payment.transactions[0].item_list.items[0].price
-//             }
+    const execute_payment_json = {
+      "payer_id": payerId,
+      "transactions": [{
+          "amount": {
+              "currency": "EUR",
+              "total": price
+          }
+      }]
+    };
 
-//             const order = new Order(body)
-//             order
-//                 .save()
-//                 .then((result) => {
-//                     res.redirect('/orders')
-//                 })
-//                 .catch((err) => {
-//                     console.log(err)
-//             })
-//       }
-//   });
+    console.log(execute_payment_json)
+  
+    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+        if (error) {
+            console.log(error.response);
+            throw error;
+        } else {
+            const body = {
+                googleId: req.user.googleId,
+                recipient_name: payment.payer.payer_info.shipping_address.recipient_name,
+                email: payment.payer.payer_info.email,
+                address: payment.payer.payer_info.shipping_address.line1,
+                city: payment.payer.payer_info.shipping_address.city,
+                state: payment.payer.payer_info.shipping_address.state,
+                postal_code: payment.payer.payer_info.shipping_address.postal_code,
+                country_code: payment.payer.payer_info.shipping_address.country_code,
+                item_ids: item_ids,
+                subtotal: price.toString()
+            }
+
+            console.log(body)
+
+            const order = new Order(body)
+            order
+                .save()
+                .then((result) => {
+                    res.redirect('/orders')
+                })
+                .catch((err) => {
+                    console.log(err)
+            })
+      }
+  });
 }
   
 const cancel = (req, res) => {

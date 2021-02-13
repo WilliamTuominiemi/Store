@@ -36,11 +36,11 @@ const OrderSchema = new Schema(
 			type: String,
 			required: true
 		},
-		item_name: {
-			type: String,
+		item_ids: {
+			type: Array,
 			required: true
 		},
-		item_price: {
+		subtotal: {
 			type: String,
 			required: true
 		}
