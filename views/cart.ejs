@@ -6,6 +6,7 @@
 
         <% let total = 0 %>
         <% let amount = 0 %>
+        <% let cart = []; %>
 
         <div class="cart-items">
         <% items.forEach(item => { %>
@@ -16,15 +17,28 @@
                     <h1> <%= item.item_name %> </h1>
                     <h3> Price: <%= item.price %></h3>
                     <p> Amount: <%= item.amount %> </p>
+                    <p> <%= item._id %> </p>
                 </div>
+
+            <% const body = { "id": item._id, "amount": item.amount } %>
+            <% cart.push(body) %> 
         <% }) %>
         </div>   
         
+        <%= cart[0].id %>
+
         <div class="cart-buy">
             <h3>Subtotal <%= total %>€</h3>
             <h3> <%= amount %>  item(s)</h3>
             <p> FREE SHIPPING </p>
+            <% let i = 0 %>
             <form action="/pay" method="post">
+                <input type="hidden" name="subtotal" value="<%= total %>">
+                <% items.forEach(item => { %>
+                    <input type="hidden" name="body[<%= i %>][id]" value="<%= item.item_id %>">
+                    <input type="hidden" name="body[<%= i %>][amount]" value="<%= item.amount %>">
+                    <% i = i +1 %> 
+                <% }) %>
                 <input type="submit" value="buy" background-color="red">
             </form> 
             <p> We Accept: </p>

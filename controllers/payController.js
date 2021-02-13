@@ -65,80 +65,79 @@ const pay = (req, res) => {
             },
             "transactions": [{
                 "item_list": {
-                    "items": [items]
+                    "items": items
                 },
                 "amount": {
                     "currency": "EUR",
-                    "total": parseFloat(req.body.subtotal)
+                    "total": parseFloat(req.body.subtotal) // 25
                 },
                 "description": "Purcahsed from the Store"
             }]
         };
         
-        console.log(req.body)
-        console.log(create_payment_json.transactions[0])
+        // console.log(req.body)
+        // console.log(create_payment_json.transactions[0])
 
-        
-
-        // paypal.payment.create(create_payment_json, function (error, payment) {
-        //     if (error) {
-        //         throw error;
-        //     } else {
-        //         for(let i = 0;i < payment.links.length;i++){
-        //         if(payment.links[i].rel === 'approval_url'){
-        //             res.redirect(payment.links[i].href);
-        //         }
-        //         }
-        //     }
-        // });
+        paypal.payment.create(create_payment_json, function (error, payment) {
+            if (error) {
+                throw error;
+            } else {
+                for(let i = 0;i < payment.links.length;i++){
+                if(payment.links[i].rel === 'approval_url'){
+                    res.redirect(payment.links[i].href);
+                }
+                }
+            }
+        });
     }
       
     f();
 }
   
 const success = (req, res) => {
-    const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId;
+    console.log(success)
+//     const payerId = req.query.PayerID;
+//     const paymentId = req.query.paymentId;
   
-    const execute_payment_json = {
-      "payer_id": payerId,
-      "transactions": [{
-          "amount": {
-              "currency": "EUR",
-              "total": price
-          }
-      }]
-    };
+//     const execute_payment_json = {
+//       "payer_id": payerId,
+//       "transactions": [{
+//           "amount": {
+//               "currency": "EUR",
+//               "total": price
+//           }
+//       }]
+//     };
   
-    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-        if (error) {
-            console.log(error.response);
-            throw error;
-        } else {
-            const body = {
-                googleId: req.user.googleId,
-                recipient_name: payment.payer.payer_info.shipping_address.recipient_name,
-                email: payment.payer.payer_info.email,
-                address: payment.payer.payer_info.shipping_address.line1,
-                city: payment.payer.payer_info.shipping_address.city,
-                state: payment.payer.payer_info.shipping_address.state,
-                postal_code: payment.payer.payer_info.shipping_address.postal_code,
-                country_code: payment.payer.payer_info.shipping_address.country_code,
-                item_name: payment.transactions[0].item_list.items[0].name,
-                item_price: payment.transactions[0].item_list.items[0].price
-            }
+//     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+//         if (error) {
+//             console.log(error.response);
+//             throw error;
+//         } else {
+//             const body = {
+//                 googleId: req.user.googleId,
+//                 recipient_name: payment.payer.payer_info.shipping_address.recipient_name,
+//                 email: payment.payer.payer_info.email,
+//                 address: payment.payer.payer_info.shipping_address.line1,
+//                 city: payment.payer.payer_info.shipping_address.city,
+//                 state: payment.payer.payer_info.shipping_address.state,
+//                 postal_code: payment.payer.payer_info.shipping_address.postal_code,
+//                 country_code: payment.payer.payer_info.shipping_address.country_code,
+//                 item_name: payment.transactions[0].item_list.items[0].name,
+//                 item_price: payment.transactions[0].item_list.items[0].price
+//             }
 
-            const order = new Order(body)
-            order
-                .save()
-                .then((result) => {
-                    res.redirect('/orders')
-                })
-                .catch((err) => {
-                    console.log(err)
-            })
-      }
-  });
+//             const order = new Order(body)
+//             order
+//                 .save()
+//                 .then((result) => {
+//                     res.redirect('/orders')
+//                 })
+//                 .catch((err) => {
+//                     console.log(err)
+//             })
+//       }
+//   });
 }
   
 const cancel = (req, res) => {
