@@ -11,7 +11,8 @@
             </div>
             <div class="prod_info">
                 <h1> <%= data.title %> </h1>      
-                <p> <%= data.desc %> </p>                 
+                <p> <%= data.desc %> </p>
+                <h3> <%= data.price %>  </h3>                
                 <form action="/addtocart" method="post">
                     <input type = "hidden" name = "id" id="id" value="<%= data._id %>" />
                     <input type="number" id="amount" name="amount" min="1" max="5" value="1" required>
