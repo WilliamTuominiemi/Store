@@ -29,7 +29,13 @@
                         <img class="cart_image" src=<%= imageUrl %> alt=<%= item.item_name %> height=125px width=125px> 
                         <a href=<%=item.item_id%>> <h1> <%= item.item_name %> </h1> </a>     
                         <h3> Price: <%= item.price %> /item</h3>
-                        <p> Amount: <%= item.amount %> </p>
+                        <form action="/edit_cart" method="post">
+                            Amount: 
+                            <input type="number" id="amount" name="amount" min="1" max="5" value="<%= item.amount %>" required>
+                            <input type="hidden" id="id" name="id" value="<%= item._id %>" required>
+
+                            <input class="update_cart" type="submit" value="update" background-color="blue" >
+                        </form> 
                     </div>
     
                 <% const body = { "id": item._id, "amount": item.amount } %>

@@ -180,6 +180,16 @@ const cart = (req, res) => {
 	})
 }
 
+const edit_cart = (req, res) => {
+	const filter = {_id: req.body.id}
+	const update = {amount: req.body.amount}
+
+	Cart.findOneAndUpdate(filter, update)
+	.then((result) => {
+		res.redirect('/cart')
+	})
+}
+
 // Renders EJS page
 const index_about = (req, res) => {
 	//res.render('about', { title: 'About' })
@@ -265,5 +275,6 @@ module.exports = {
 	product_page,
 	orders,
 	add_to_cart,
-	cart
+	cart,
+	edit_cart
 }

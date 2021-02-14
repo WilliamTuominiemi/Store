@@ -10,6 +10,8 @@ router.post('/dev', indexController.index_dev_post)
 router.get('/orders', indexController.orders)
 router.post('/addtocart', indexController.add_to_cart)
 router.get('/cart', indexController.cart)
+router.post('/edit_cart', indexController.edit_cart)
+
 
 
 
