@@ -83,13 +83,23 @@ const orders = (req, res) => {
 	}	
 	else {
 		let items = [];
+		let data = [];
+		
 		const param = req.user.googleId
 
 		Order.find( {googleId: param})
 		.then((result) => {
 			async function f() {
+				let data1;
+
 				result.forEach(order => {
-					console.log(order)
+					//console.log(order)
+					let array = [];
+
+
+
+					// console.log(order)
+					
 					order.item_ids.forEach(item => {
 						Item.find({_id: item.id})
 						.then((result1) => {
@@ -97,21 +107,36 @@ const orders = (req, res) => {
 								"item_": result1[0],
 								"amount": item.amount
 							}
-							items.push(_item)
+							array.push(_item)
 						})
 					})
+
+					data1 = {
+						order,
+						array
+					}
+
+					data.push(data1)
+
+					items.push(array)
 				})
+
 
 				let promise = new Promise((resolve, reject) => {
 					setTimeout(() => resolve("done!"), 1000)
 				});
+
 				
 				let p_result = await promise; // wait until the promise resolves (*)
 
 				// console.log(items)
 
 
-				res.render(page, { title: 'Orders', user: req.user, dev: false, orders: result, items: items})
+
+				console.log(data)
+
+
+				res.render(page, { title: 'Orders', user: req.user, dev: false, data: data})
 			}
 			
 			f();

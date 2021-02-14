@@ -4,11 +4,11 @@
 	<body>
 		<%- include("./partials/nav.ejs") %>
 
-        <% orders.forEach(order => { %>
+        <% data.forEach(order => { %>
             <div class="orders">
                 <div class="order">
                     <div class="order_item">
-                        <% items.forEach(item => { %>
+                        <% order.array.forEach(item => { %>
                             <% const imageUrl = '/images/'+item.item_.image_name.toString() %>
                             <img class="logo" src=<%= imageUrl %> alt=<%= item.item_.title %> height=125px width=125px>   
                             <%= item.item_.title %>
@@ -16,15 +16,15 @@
                         <% }) %>
                     </div>
                     <div class="order_info">
-                        <h3> Cost: <%= order.subtotal %> €</h3>
-                        <h2> Address: <%= order.address %> </h2>
-                        <p> Order id: <%= order._id %> </p>
+                        <h3> Cost: <%= order.order.subtotal %> €</h3>
+                        <h2> Address: <%= order.order.address %> </h2>
+                        <p> Order id: <%= order.order._id %> </p>
                     </div>
                     
                 </div>
             </div>     
         <% }) %>
-        <% if(orders.length === 0) { %>
+        <% if(data.length === 0) { %>
             <center>
                 <h5> There are no orders here </h5>
                 <a href="/">Back to shopping</a>

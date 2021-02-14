@@ -20,15 +20,18 @@ paypal.configure({
 
 const pay = (req, res) => {
     
+    item_ids = []
+
     async function f() {
 
         items = [];
         req_items = req.body.body
+        console.log("req_items: ", req_items)
 
         let itemsProcessed = 0
 
         req_items.forEach(item => {
-            console.log(item.id)
+            //console.log(item.id)
             const param = item.id
             Item.find({ _id: param })
             .then((result) => {
@@ -60,7 +63,8 @@ const pay = (req, res) => {
       
         let result = await promise; // wait until the promise resolves (*)
       
-        console.log(items)
+        console.log("item_ids: ", item_ids)
+        //console.log(items)
 
         price = parseFloat(req.body.subtotal)
         cartID = req.body.cart_id
@@ -123,6 +127,7 @@ const success = (req, res) => {
     console.log(execute_payment_json)
   
     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+        console.log("item ids", item_ids)
         if (error) {
             console.log(error.response);
             throw error;

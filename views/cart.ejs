@@ -15,12 +15,14 @@
             <% let total = 0 %>
             <% let amount = 0 %>
             <% let cart = []; %>
+            <% let index = 0 %>
     
             <div class="cart-items">
             <% items.forEach(item => { %>
                 <% let item_price = parseFloat(item.price) * parseFloat(item.amount) %>
                 <% total = total + item_price %>
                 <% amount = amount + parseInt(item.amount) %>
+                <% index = index +1 %>
     
                     <div class="cart-item">
                         <% const imageUrl = '/images/'+item.image_name %>
