@@ -15,22 +15,44 @@
                     <img class="logo" src=<%= imageUrl %> alt=<%= item.title %> height=125px width=125px>   
                     <%= item.title %>
 
+                    <% let buttonText; %> 
+
                     <form action="/review/<%= item._id %>" method="post">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="title" id="title" placeholder="Title" required> 
-                        </div>
-                        <div class="form-group">
-                            <textarea type="desc" rows="5" class="form-control" name="desc" id="desc" placeholder="Description" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            Rating: <input type="number" id="rating" name="rating" min="1" max="5" value="5" required> / 5
-                        </div>
+                        <% if(review === "undefined") { %>
+                            <% buttonText = "add" %>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="title" id="title" placeholder="Title" required> 
+                            </div>
+                            <div class="form-group">
+                                <textarea type="desc" rows="5" class="form-control" name="desc" id="desc" placeholder="Description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                Rating: <input type="number" id="rating" name="rating" min="1" max="5" value="5" required> / 5
+                            </div>
+                            <input type="hidden" id="update" name="update" value="false" required>
+
+                        <% } else { %>
+                            <% buttonText = "update" %>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="title" id="title" placeholder="Title" value="<%= review.title %>" required> 
+                            </div>
+                            <div class="form-group">
+                                <textarea type="desc" rows="5" class="form-control" name="desc" id="desc" placeholder="Description" required><%= review.desc %></textarea>
+                            </div>
+                            <div class="form-group">
+                                Rating: <input type="number" id="rating" name="rating" min="1" max="5" value="<%= review.rating %>" required> / 5
+                            </div>
+                            <input type="hidden" id="update" name="update" value="true" required>
+
+                        <% } %>
+                        
                         <input type="hidden" id="googleId" name="googleId" value="<%= user.googleId %>" required>
                         <input type="hidden" id="name" name="name" value="<%= user.displayName %>" required>
                         <input type="hidden" id="itemId" name="itemId" value="<%= item._id %>" required>
 
                         <div class="form-group">
-                            <input type="submit" value="add">
+                            <input type="submit" value="<%= buttonText %>">
                         </div>
                     </form>
                 </div>

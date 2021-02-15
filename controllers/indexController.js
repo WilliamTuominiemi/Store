@@ -83,7 +83,6 @@ const product_page = (req, res) => {
 
 const orders = (req, res) => {
 	const page = 'orders'
-	//res.render(page, { title: 'Orders' })
 	if(req.user === undefined) {
 		res.redirect('/auth/google')
 	}	
@@ -99,12 +98,7 @@ const orders = (req, res) => {
 				let data1;
 
 				result.forEach(order => {
-					//console.log(order)
 					let array = [];
-
-
-
-					// console.log(order)
 					
 					order.item_ids.forEach(item => {
 						Item.find({_id: item.id})
@@ -116,37 +110,23 @@ const orders = (req, res) => {
 							array.push(_item)
 						})
 					})
-
 					data1 = {
 						order,
 						array
 					}
-
 					data.push(data1)
-
 					items.push(array)
 				})
-
 
 				let promise = new Promise((resolve, reject) => {
 					setTimeout(() => resolve("done!"), 1000)
 				});
-
-				
+			
 				let p_result = await promise; // wait until the promise resolves (*)
 
-				// console.log(items)
-
-
-
-				console.log(data)
-
-
 				res.render(page, { title: 'Orders', user: req.user, dev: false, data: data})
-			}
-			
+			}		
 			f();
-
 		})
 	}		
 }
@@ -187,10 +167,7 @@ const cart = (req, res) => {
 }
 
 const edit_cart = (req, res) => {
-
 	const filter = {_id: req.body.id}
-
-
 	if(parseInt(req.body.amount) === 0)	{
 		Cart.findOneAndDelete(filter)
 		.then((result) => {
@@ -212,25 +189,45 @@ const review = (req, res) => {
 	Item.find( { _id: param})
 	.sort({ createdAt: -1 })
 	.then((result) => {
-		res.render('review', { title: 'Review', user: req.user, dev: false, item: result[0]})
+		Review.find({itemId: param})
+		.then((result1) => {
+			if(result1.length === 0)	{
+				res.render('review', { title: 'Review', user: req.user, dev: false, item: result[0], review: "undefined"})
+			}	else{
+				res.render('review', { title: 'Review', user: req.user, dev: false, item: result[0], review: result1[0]})
+			}
+		})
 	})
 }
 
 const write_review = (req, res) => {
 	const param = req.params.id
 
-	const review = new Review(req.body)
-
 	const url = `/${param}`
 
-	review
-		.save()
+	if(req.body.update === "true")	{
+		const filter = {itemId: req.body.itemId, googleId: req.user.googleId}
+		const update = {
+			title: req.body.title,
+			desc: req.body.desc,
+			rating: req.body.rating
+		}
+		delete review.update;
+		Review.findOneAndUpdate(filter, update)
 		.then((result) => {
 			res.redirect(url)
 		})
-		.catch((err) => {
-			console.log(err)
-	})
+	}	else	{
+		const review = new Review(req.body)
+		review
+			.save()
+			.then((result) => {
+				res.redirect(url)
+			})
+			.catch((err) => {
+				console.log(err)
+		})
+	}
 }
 
 // Renders EJS page
