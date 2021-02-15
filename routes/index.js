@@ -19,6 +19,9 @@ router.post('/pay', payController.pay)
 router.get('/success', payController.success)
 router.get('/cancel', payController.cancel)
 
+router.get('/review/:id', indexController.review)
+router.post('/review/:id', indexController.write_review)
+
 router.get('/:id', indexController.product_page)
 
 

@@ -12,7 +12,10 @@
                             <% const imageUrl = '/images/'+item.item_.image_name.toString() %>
                             <img class="logo" src=<%= imageUrl %> alt=<%= item.item_.title %> height=125px width=125px>   
                             <%= item.item_.title %>
-                           | Quantity: <%= item.amount %>
+                           | Quantity: <%= item.amount %> |
+                           
+                           <a href="/review/<%= item.item_._id %>">Write a review</a>
+                           <br />
                         <% }) %>
                     </div>
                     <div class="order_info">

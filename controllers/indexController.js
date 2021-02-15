@@ -1,6 +1,8 @@
 const Item = require('../models/Item')
 const Order = require('../models/Order')
 const Cart = require('../models/Cart')
+const Review = require('../models/Review')
+
 
 
 const dotenv = require('dotenv')
@@ -190,6 +192,33 @@ const edit_cart = (req, res) => {
 	})
 }
 
+const review = (req, res) => {
+	const param = req.params.id
+
+	Item.find( { _id: param})
+	.sort({ createdAt: -1 })
+	.then((result) => {
+		res.render('review', { title: 'Review', user: req.user, dev: false, item: result[0]})
+	})
+}
+
+const write_review = (req, res) => {
+	const param = req.params.id
+
+	const review = new Review(req.body)
+
+	const url = `/${param}`
+
+	review
+		.save()
+		.then((result) => {
+			res.redirect(url)
+		})
+		.catch((err) => {
+			console.log(err)
+	})
+}
+
 // Renders EJS page
 const index_about = (req, res) => {
 	//res.render('about', { title: 'About' })
@@ -276,5 +305,7 @@ module.exports = {
 	orders,
 	add_to_cart,
 	cart,
-	edit_cart
+	edit_cart,
+	review,
+	write_review
 }
