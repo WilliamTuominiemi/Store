@@ -1,0 +1,43 @@
+<html lang="en">
+	<%- include("./partials/head.ejs") %>
+
+	<body>
+		<%- include("./partials/nav.ejs") %>
+
+        <% reviews.forEach(review => { %>
+            <div class="orders">
+                <div class="order">
+                    <div class="order_item">
+                        
+                    </div>
+                    <div class="order_info">
+                        <a href="/<%= review.itemId %>"><h3> <%= review.itemName %> </h3></a>
+                        <p><%= review.createdAt %></p>
+                        <% let i; %>
+                        <% for(i = 0; i < parseInt(review.rating); i++) { %>
+                            <img class="star_image" src='/images/star.png' alt="star" height=25px width=25px>                         
+                        <% } %>
+                        <br />
+                        <a href="/review/<%= review.itemId %>">Edit</a>
+
+                    </div>
+                    
+                </div>
+            </div>     
+        <% }) %>
+        <% if(reviews.length === 0) { %>
+            <center>
+                <h5> You have not written anyt reviews </h5>
+                <a href="/">Back to shopping</a>
+            </center>
+        <% } %>
+        
+        
+
+		<!-- <main role="main" class="container">
+            
+    	</main> -->
+        
+        <!-- <button onclick="SecondLast()">Click me</button> -->
+	</body>
+</html>

@@ -11,6 +11,9 @@ router.get('/orders', indexController.orders)
 router.post('/addtocart', indexController.add_to_cart)
 router.get('/cart', indexController.cart)
 router.post('/edit_cart', indexController.edit_cart)
+router.get('/reviews', indexController.reviews)
+
+
 
 
 

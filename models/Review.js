@@ -20,6 +20,10 @@ const ReviewSchema = new Schema(
             type: String,
 			required: true	
         },
+        itemName: {
+            type: String,
+			required: true	
+        },
 		googleId: {
 			type: String,
 			required: true

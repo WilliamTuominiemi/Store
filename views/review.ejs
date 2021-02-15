@@ -47,6 +47,7 @@
 
                         <% } %>
                         
+                        <input type="hidden" id="itemName" name="itemName" value="<%= item.title %>" required>
                         <input type="hidden" id="googleId" name="googleId" value="<%= user.googleId %>" required>
                         <input type="hidden" id="name" name="name" value="<%= user.displayName %>" required>
                         <input type="hidden" id="itemId" name="itemId" value="<%= item._id %>" required>
