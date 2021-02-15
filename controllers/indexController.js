@@ -183,13 +183,23 @@ const cart = (req, res) => {
 }
 
 const edit_cart = (req, res) => {
-	const filter = {_id: req.body.id}
-	const update = {amount: req.body.amount}
 
-	Cart.findOneAndUpdate(filter, update)
-	.then((result) => {
-		res.redirect('/cart')
-	})
+	const filter = {_id: req.body.id}
+
+
+	if(parseInt(req.body.amount) === 0)	{
+		Cart.findOneAndDelete(filter)
+		.then((result) => {
+			res.redirect('/cart')
+		})
+	}	else {
+		const update = {amount: req.body.amount}
+	
+		Cart.findOneAndUpdate(filter, update)
+		.then((result) => {
+			res.redirect('/cart')
+		})
+	}	
 }
 
 const review = (req, res) => {
