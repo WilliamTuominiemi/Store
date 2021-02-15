@@ -183,6 +183,15 @@ const edit_cart = (req, res) => {
 	}	
 }
 
+const reviews = (req, res) => {
+	console.log("pog")
+	Review.find({googleId: req.user.googleId})
+	.then((result) => {
+		Item.find({_id: result})
+		res.render('reviews', { title: 'Reviews', user: req.user, dev: false, reviews: result})
+	})
+}
+
 const review = (req, res) => {
 	const param = req.params.id
 
@@ -318,5 +327,6 @@ module.exports = {
 	cart,
 	edit_cart,
 	review,
-	write_review
+	write_review,
+	reviews
 }
