@@ -65,15 +65,19 @@ const product_page = (req, res) => {
 	const page = 'product'
 	Item.find( {_id: param})
 	.then((result) => {
-		if(req.user === undefined) {
-			res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0]})
-		}	else {
-			if(req.user.googleId.toString() === admin_id)	{
-				res.render(page, { title: result[0].title, user: req.user, dev: true, data: result[0]})
+		Review.find({itemId: param})
+		.then((reviews) => {
+			console.log(reviews)
+			if(req.user === undefined) {
+				res.render(page, { title: result[0].title, user: "undefined", dev: false, data: result[0], reviews: reviews })
 			}	else {
-				res.render(page, { title: result[0].title, user: req.user, dev: false, data: result[0]})
+				if(req.user.googleId.toString() === admin_id)	{
+					res.render(page, { title: result[0].title, user: req.user, dev: true, data: result[0], reviews: reviews })
+				}	else {
+					res.render(page, { title: result[0].title, user: req.user, dev: false, data: result[0], reviews: reviews })
+				}
 			}
-		}
+		})	
 	})
 }
 

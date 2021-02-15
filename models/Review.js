@@ -16,7 +16,15 @@ const ReviewSchema = new Schema(
 			type: String,
 			required: true		
 		},
+        itemId: {
+            type: String,
+			required: true	
+        },
 		googleId: {
+			type: String,
+			required: true
+		},
+        name: {
 			type: String,
 			required: true
 		}
