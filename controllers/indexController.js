@@ -224,14 +224,40 @@ const write_review = (req, res) => {
 		delete review.update;
 		Review.findOneAndUpdate(filter, update)
 		.then((result) => {
-			res.redirect(url)
+			Item.findOneAndUpdate(
+				{_id: req.body.itemId}, 
+				{ $push: 
+					{
+						review: {
+							"googleId": req.user.googleId,
+							"rating" : req.body.rating
+						}
+					}
+				}
+			)
+			.then((result2) => {
+				res.redirect(url)
+			})
 		})
 	}	else	{
 		const review = new Review(req.body)
 		review
 			.save()
 			.then((result) => {
-				res.redirect(url)
+				Item.findOneAndUpdate(
+					{_id: req.body.itemId}, 
+					{ $push: 
+						{
+							review: {
+								"googleId": req.user.googleId,
+								"rating" : req.body.rating
+							}
+						}
+					}
+				)
+				.then((result2) => {
+					res.redirect(url)
+				})			
 			})
 			.catch((err) => {
 				console.log(err)

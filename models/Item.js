@@ -19,6 +19,9 @@ const ItemSchema = new Schema(
 		price: {
 			type: String,
 			required: true
+		},
+		review: {
+			type: Array
 		}
 	},
 	{ timestamps: true }
