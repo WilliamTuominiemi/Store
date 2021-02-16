@@ -198,7 +198,7 @@ const review = (req, res) => {
 	Item.find( { _id: param})
 	.sort({ createdAt: -1 })
 	.then((result) => {
-		Review.find({itemId: param})
+		Review.find({googleId: req.user.googleId, itemId: param})
 		.then((result1) => {
 			if(result1.length === 0)	{
 				res.render('review', { title: 'Review', user: req.user, dev: false, item: result[0], review: "undefined"})
