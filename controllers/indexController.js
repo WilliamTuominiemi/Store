@@ -226,7 +226,7 @@ const write_review = (req, res) => {
 		.then((result) => {
 			Item.findOneAndUpdate(
 				{_id: req.body.itemId}, 
-				{ $push: 
+				{ $set: 
 					{
 						review: {
 							"googleId": req.user.googleId,
