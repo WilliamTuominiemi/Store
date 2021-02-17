@@ -11,8 +11,27 @@
             </div>
             <div class="prod_info">
                 <h1> <%= data.title %> </h1>      
+                
+                
+                <% let amount = 0.00 %>
+                <% let total = 0.00 %>
+
+                <% data.review.forEach(review => { %>
+                    <% amount = amount + 1.00 %>
+                    <% total = total + parseFloat(review.rating) %>
+                    <% }) %>
+
+                <% let average = total / amount %>
+
+                <% for(i = 0; i < Math.round(average); i++) { %>
+                    <img class="star_image" src='/images/star.png' alt="star" height=25px width=25px>                         
+                <% } %>
+
+                <%= average %>
+
                 <p> <%= data.desc %> </p>
-                <h3> <%= data.price %>  </h3>                
+                <h3> <%= data.price %>  </h3>     
+
                 <form action="/addtocart" method="post">
                     <input type = "hidden" name = "id" id="id" value="<%= data._id %>" />
                     <input type="number" id="amount" name="amount" min="1" max="5" value="1" required>
