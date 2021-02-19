@@ -18,6 +18,9 @@ const connectDB = require('./config/db')
 const ejs = require('ejs')
 const paypal = require('paypal-rest-sdk')
 
+var nodemailer = require('nodemailer');
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // Load config
 dotenv.config({ path: './config/config.env' })
@@ -30,6 +33,15 @@ const app = express()
 
 // Port number
 const PORT1 = process.env.PORT || 3000
+
+// Email
+var transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+	  user: process.env.EMAIL,
+	  pass: process.env.EMAIL_PASS
+	}
+});
 
 // PayPal
 paypal.configure({
@@ -65,6 +77,24 @@ app.use(express.urlencoded())
 // Favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
+app.get('/sendmail', (req,res) => {  
+	console.log(req.user)
+	// var mailOptions = {
+	// 	from: process.env.EMAIL,
+	// 	to: req.user.googleId,
+	// 	subject: 'Sending Email using Node.js',
+	// 	text: 'That was easy!'
+	//   };
+	  
+	// transporter.sendMail(mailOptions, function(error, info){
+	// 	if (error) {
+	// 	  console.log(error);
+	// 	} else {
+	// 	  console.log('Email sent: ' + info.response);
+	// 	}
+	// });
+})
+
 // Routes
 app.use('/posts', post)
 app.use('/auth', auth)
@@ -78,6 +108,8 @@ app.use((req, res) => {
 		res.status(404).render('404', { title: 'Page not found', user: req.user, dev: false })
 	}
 })
+
+
 
 // Listen for requests
 app.listen(PORT1, () => {
