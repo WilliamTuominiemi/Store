@@ -18,8 +18,11 @@ paypal.configure({
     'client_secret': process.env.CLIENT_SECRET
 });
 
+var nodemailer = require('nodemailer');
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const pay = (req, res) => {
-    
     item_ids = []
 
     async function f() {
@@ -114,6 +117,14 @@ const success = (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
   
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASS
+        }
+      })
+
     const execute_payment_json = {
       "payer_id": payerId,
       "transactions": [{
@@ -147,19 +158,41 @@ const success = (req, res) => {
 
             console.log(body)
 
+            const mailOptions = {
+                from: process.env.EMAIL,
+                to: payment.payer.payer_info.email,
+                subject: `Order receipt on Store`,
+                text: "body"
+            }
+
             const order = new Order(body)
             order
                 .save()
                 .then((result) => {
+                    console.log("fuuuck1")
                     console.log(cartID)
                     Cart.deleteMany({ googleId: req.user.googleId }, (err) => {
+                        console.log("fuuuck2")
+
                         if (err) {
+                            console.log("fuuuck3")
+
                             return handleError(err);
                         } 
-                        else {
-                            res.redirect('/orders')
+                        else {    
+                            console.log("fuuuck4")
+
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    console.log("fuuuck5")
+                                    console.log(error)
+                                } else {
+                                    console.log('Email sent: ' + info.response);
+                                    res.redirect('/orders')
+                                }
+                            })
                         }
-                    });
+                    })
                 })
                 .catch((err) => {
                     console.log(err)
