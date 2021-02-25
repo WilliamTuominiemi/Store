@@ -10,19 +10,17 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-const send_mail = () => {
-    var mailOptions = {
-    from: 'william.automatic.emailer@gmail.com',
-    to: 'william.m.tuominiemi@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-    };
+var mailOptions = {
+  from: 'william.automatic.emailer@gmail.com',
+  to: 'william.m.tuominiemi@gmail.com',
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy!'
+};
 
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-    });
-}
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});

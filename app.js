@@ -79,20 +79,20 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 app.get('/sendmail', (req,res) => {  
 	console.log(req.user)
-	// var mailOptions = {
-	// 	from: process.env.EMAIL,
-	// 	to: req.user.googleId,
-	// 	subject: 'Sending Email using Node.js',
-	// 	text: 'That was easy!'
-	//   };
+	var mailOptions = {
+		from: process.env.EMAIL,
+		to: req.user.googleId,
+		subject: 'Sending Email using Node.js',
+		text: 'That was easy!'
+	  };
 	  
-	// transporter.sendMail(mailOptions, function(error, info){
-	// 	if (error) {
-	// 	  console.log(error);
-	// 	} else {
-	// 	  console.log('Email sent: ' + info.response);
-	// 	}
-	// });
+	transporter.sendMail(mailOptions, function(error, info){
+		if (error) {
+		  console.log(error);
+		} else {
+		  console.log('Email sent: ' + info.response);
+		}
+	});
 })
 
 // Routes
