@@ -16,17 +16,11 @@ paypal.configure({
     'mode': 'sandbox', //sandbox or live
     'client_id': process.env.CLIENT_ID,
     'client_secret': process.env.CLIENT_SECRET
-});
+})
 
-<<<<<<< HEAD
 const nodemailer = require('nodemailer')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
-=======
-var nodemailer = require('nodemailer');
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
->>>>>>> e3f7662aa3a23bbf3ccd41ad93e17a8b2dff7a6f
 
 const pay = (req, res) => {
     item_ids = []
@@ -122,14 +116,6 @@ const success = (req, res) => {
     console.log(success)
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
-  
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.EMAIL_PASS
-        }
-      })
 
     const execute_payment_json = {
       "payer_id": payerId,
@@ -172,18 +158,16 @@ const success = (req, res) => {
 
             const mailOptions = {
                 from: process.env.EMAIL,
-                to: payment.payer.payer_info.email,
-                subject: `Order receipt on Store`,
-                text: "body"
-            }
+                to: "william.m.tuominiemi@gmail.com",
+                // to: payment.payer.payer_info.email,
+                subject: `Order receipt for Store`,
+                text: `
+                Recipient: ${payment.payer.payer_info.shipping_address.recipient_name}
+                Address: ${payment.payer.payer_info.shipping_address.line1}
+                Subtotal: ${price.toString()} €
 
-            
-
-            const mailOptions = {
-                from: process.env.EMAIL,
-                to: payment.payer.payer_info.email,
-                subject: `Order receipt on Store`,
-                text: "body"
+                If you have any questions, contact support here cock@gmail.com
+                `
             }
 
             const order = new Order(body)
