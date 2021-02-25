@@ -18,6 +18,10 @@ paypal.configure({
     'client_secret': process.env.CLIENT_SECRET
 });
 
+const nodemailer = require('nodemailer')
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+
 const pay = (req, res) => {
     
     item_ids = []
@@ -122,7 +126,15 @@ const success = (req, res) => {
               "total": price
           }
       }]
-    };
+    }
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASS
+        }
+    })
 
     console.log(execute_payment_json)
   
@@ -145,7 +157,14 @@ const success = (req, res) => {
                 subtotal: price.toString()
             }
 
-            console.log(body)
+            const mailOptions = {
+                from: process.env.EMAIL,
+                to: payment.payer.payer_info.email,
+                subject: `Order receipt on Store`,
+                text: "body"
+            }
+
+            
 
             const order = new Order(body)
             order
@@ -157,9 +176,17 @@ const success = (req, res) => {
                             return handleError(err);
                         } 
                         else {
-                            res.redirect('/orders')
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    console.log("fuuuck5")
+                                    console.log(error)
+                                } else {
+                                    console.log('Email sent: ' + info.response);
+                                    res.redirect('/orders')
+                                }
+                            })
                         }
-                    });
+                    })
                 })
                 .catch((err) => {
                     console.log(err)
