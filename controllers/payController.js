@@ -18,12 +18,17 @@ paypal.configure({
     'client_secret': process.env.CLIENT_SECRET
 });
 
+<<<<<<< HEAD
 const nodemailer = require('nodemailer')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+=======
+var nodemailer = require('nodemailer');
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+>>>>>>> e3f7662aa3a23bbf3ccd41ad93e17a8b2dff7a6f
 
 const pay = (req, res) => {
-    
     item_ids = []
 
     async function f() {
@@ -118,6 +123,14 @@ const success = (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
   
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASS
+        }
+      })
+
     const execute_payment_json = {
       "payer_id": payerId,
       "transactions": [{
@@ -166,16 +179,34 @@ const success = (req, res) => {
 
             
 
+            const mailOptions = {
+                from: process.env.EMAIL,
+                to: payment.payer.payer_info.email,
+                subject: `Order receipt on Store`,
+                text: "body"
+            }
+
             const order = new Order(body)
             order
                 .save()
                 .then((result) => {
+                    console.log("fuuuck1")
                     console.log(cartID)
                     Cart.deleteMany({ googleId: req.user.googleId }, (err) => {
+                        console.log("fuuuck2")
+
                         if (err) {
+                            console.log("fuuuck3")
+
                             return handleError(err);
                         } 
+<<<<<<< HEAD
                         else {
+=======
+                        else {    
+                            console.log("fuuuck4")
+
+>>>>>>> e3f7662aa3a23bbf3ccd41ad93e17a8b2dff7a6f
                             transporter.sendMail(mailOptions, (error, info) => {
                                 if (error) {
                                     console.log("fuuuck5")
