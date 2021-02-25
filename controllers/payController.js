@@ -190,23 +190,12 @@ const success = (req, res) => {
             order
                 .save()
                 .then((result) => {
-                    console.log("fuuuck1")
                     console.log(cartID)
                     Cart.deleteMany({ googleId: req.user.googleId }, (err) => {
-                        console.log("fuuuck2")
-
                         if (err) {
-                            console.log("fuuuck3")
-
                             return handleError(err);
                         } 
-<<<<<<< HEAD
-                        else {
-=======
                         else {    
-                            console.log("fuuuck4")
-
->>>>>>> e3f7662aa3a23bbf3ccd41ad93e17a8b2dff7a6f
                             transporter.sendMail(mailOptions, (error, info) => {
                                 if (error) {
                                     console.log("fuuuck5")
